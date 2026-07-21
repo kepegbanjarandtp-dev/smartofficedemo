@@ -1,0 +1,186 @@
+/* ===============================================================================
+   SMART OFFICE GLOBAL
+=============================================================================== */
+
+*,
+*::before,
+*::after{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    font-size:16px;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    background:#f8fafc;
+    color:#1e293b;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+}
+
+
+/* ======================================================
+   SMART OFFICE PAGE TRANSITION
+====================================================== */
+.smartoffice-page-enter{
+  animation:
+    smartofficePageEnter 0.28s ease;
+}
+
+@keyframes smartofficePageEnter{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+
+/* ======================================================
+   SMART OFFICE TOAST
+====================================================== */
+.smartoffice-toast{
+  position:fixed;
+  top:24px;
+  right:24px;
+  width:max-content;
+  max-width:320px;
+  padding:14px 18px;
+  border-radius:18px;
+  font-size:14px;
+  font-weight:500;
+  z-index:99999;
+  opacity:0;
+  pointer-events:none;
+
+  transform:
+    translateX(120%);
+
+  transition:
+    0.28s ease;
+
+  backdrop-filter:blur(14px);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+}
+
+.smartoffice-toast.show{
+  opacity:1;
+  transform:
+    translateX(0);
+}
+
+/* =========================
+   SUCCESS
+========================= */
+.smartoffice-toast.success{
+  background:
+    rgba(37,99,235,0.96);
+  color:#ffffff;
+}
+
+/* =========================
+   ERROR
+========================= */
+.smartoffice-toast.error{
+  background:
+    rgba(239,68,68,0.96);
+  color:#ffffff;
+}
+
+/* =========================
+   INFO
+========================= */
+.smartoffice-toast.info{
+  background:
+    rgba(15,23,42,0.96);
+  color:#ffffff;
+}
+
+
+/* ======================================================
+   SMART OFFICE MINI LOADER
+====================================================== */
+.smartoffice-mini-loader{
+
+  width:18px;
+  height:18px;
+
+  border-radius:50%;
+
+  border:
+    2px solid
+    rgba(255,255,255,0.35);
+
+  border-top-color:
+    #ffffff;
+
+  display:inline-block;
+
+  animation:
+    smartofficeSpin
+    0.45s linear infinite;
+}
+
+@keyframes smartofficeSpin{
+
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+@media(max-width:768px){
+  .smartoffice-toast{
+    left:50%;
+    right:auto;
+    width:max-content;
+    max-width:calc(100vw - 36px);
+
+    transform:
+      translateX(-50%)
+      translateY(-20px);
+  }
+
+  .smartoffice-toast.show{
+    transform:
+      translateX(-50%)
+      translateY(0);
+  }
+}
+
+
+
+
+
+
+
+
+
+
