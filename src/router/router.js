@@ -36,16 +36,18 @@ const smartofficePageInitializer = {
    LOAD PAGE
 ====================================================== */
 export async function smartofficeLoadPage(page){
+
     const response =
         await fetch(
-            `/src/pages/${page}.html`
+            `/pages/${page}.html`
         );
-    if(
-        !response.ok
-    ){
+
+    if(!response.ok){
+
         throw new Error(
             `Halaman ${page} tidak ditemukan`
         );
+
     }
 
     const html =
@@ -56,20 +58,17 @@ export async function smartofficeLoadPage(page){
         .innerHTML =
         html;
 
-    /* =========================
-       INIT PAGE
-    ========================= */
     const initializer =
         smartofficePageInitializer[
             page
         ];
 
-    if(
-        typeof initializer ===
-        "function"
-    ){
+    if(typeof initializer === "function"){
+
         await initializer();
+
     }
+
 }
 
 
