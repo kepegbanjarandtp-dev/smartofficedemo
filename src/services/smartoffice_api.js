@@ -14,6 +14,7 @@ async function smartofficeRequest(
     action,
     data = {}
 ){
+    console.time(action);
 
     const body = new URLSearchParams();
 
@@ -31,12 +32,13 @@ async function smartofficeRequest(
         }
     );
 
-    console.log(
-        "API",
-        action,
-        await response.clone().text()
-    );
-
+    //console.log(
+        //"API",
+        //action,
+        //await response.clone().text()
+    //);
+    console.timeEnd(action);
+    
     return await response.json();
 
 }

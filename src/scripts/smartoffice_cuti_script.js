@@ -33,7 +33,6 @@ import {
     smartofficeRenderMobileNavbar
 } from "../components/navbar.js";
 
-import "../styles/smartoffice_style.css";
 import "../styles/smartoffice_cuti_style.css";
 import "../styles/smartoffice_approval_style.css";
 import "../styles/smartoffice_managementCuti_style.css";

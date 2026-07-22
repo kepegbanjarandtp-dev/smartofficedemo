@@ -491,131 +491,29 @@ smartofficeDashboardHeaderFade{
   color:#ffffff;
 }
 
+
 /* ======================================================
-   SMART OFFICE MOBILE NAVBAR
+   SMART OFFICE DESKTOP
 ====================================================== */
-.smartoffice-mobile-navbar{
-  position:fixed;
-
-  left:0;
-  right:0;
-  bottom:0;
-
-  width:100%;
-  height:74px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-around;
-
-  background:
-    rgba(255,255,255,0.94);
-
-  backdrop-filter:
-    blur(16px);
-
-  border-top:
-    1px solid #e2e8f0;
-
-  box-shadow:
-    0 -4px 20px rgba(0,0,0,0.08);
-
-  z-index:999999;
-
-  padding-bottom:
-    env(safe-area-inset-bottom);
-
-  animation:
-    smartofficeNavbarAppear
-    0.3s ease;
-}
-
-@keyframes smartofficeNavbarAppear{
-  from{
-    opacity:0;
-    transform:
-      translateY(100%);
+@media(min-width:1100px){
+  .smartoffice-dashboard-menu-grid{
+    grid-template-columns:
+      repeat(3,1fr);
   }
-
-  to{
-    opacity:1;
-    transform:
-      translateY(0);
-  }
-}
-
-.smartoffice-mobile-navbar-item{
-  flex:1;
-
-  display:flex;
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  gap:4px;
-
-  color:#64748b;
-
-  font-size:11px;
-  font-weight:600;
-
-  cursor:pointer;
-
-  transition:
-    0.2s ease;
-}
-
-.smartoffice-mobile-navbar-item svg{
-  width:22px;
-  height:22px;
-
-  stroke-width:2.3;
-}
-
-.smartoffice-mobile-navbar-item small{
-  font-size:11px;
-}
-
-.smartoffice-mobile-navbar-item.active{
-  color:#2563eb;
-}
-
-.smartoffice-mobile-navbar-item.active span{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  width:40px;
-  height:40px;
-
-  border-radius:14px;
-
-  background:
-    rgba(37,99,235,0.12);
-}
-
-.smartoffice-mobile-navbar-item:active{
-  transform:
-    scale(0.95);
 }
 
 
 /* ======================================================
-   SMALL DESKTOP / TABLET
+   SMART OFFICE TABLET
 ====================================================== */
 @media(max-width:1280px){
-
   .smartoffice-dashboard-stats-row{
-
     grid-template-columns:
       repeat(2,1fr);
-
     gap:12px;
   }
 
   .smartoffice-dashboard-stat-card{
-
     min-height:88px;
   }
 }
@@ -627,157 +525,132 @@ smartofficeDashboardHeaderFade{
 @media(max-width:768px){
 
   /* =========================
-    HEADER
+     WRAPPER
   ========================= */
-  html,
-  body{
-    width:100%;
-    max-width:100vw;
-    overflow-x:hidden;
-  }
- 
   .smartoffice-dashboard-wrapper{
-    padding:18px;
-    padding-bottom:100px;
-  }
-
-  .smartoffice-dashboard-header{
-    align-items:flex-start;
-  }
-
-  .smartoffice-dashboard-user-info{
-    gap:12px;
-  }
-
-  .smartoffice-dashboard-avatar{
-    width:52px;
-    height:52px;
-    font-size:20px;
-  }
-
-  .smartoffice-dashboard-header h2{
-    font-size:18px;
-    line-height:1.3;
-  }
-
-  .smartoffice-dashboard-header p{
-    font-size:14px;
-  }
-
-  .smartoffice-dashboard-logout-button{
-    padding:10px 16px;
-    font-size:13px;
+    padding:16px;
+    padding-bottom:96px;
   }
 
   /* =========================
-    MOBILE QUICK STATS
+     HEADER
   ========================= */
-  .smartoffice-dashboard-stats-row{
+  .smartoffice-dashboard-header{
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:20px;
+  }
 
-    grid-template-columns:
-      repeat(2,1fr);
-
+  .smartoffice-dashboard-user-info{
     gap:10px;
   }
 
+  .smartoffice-dashboard-avatar{
+    width:34px;
+    height:34px;
+    font-size:18px;
+  }
+
+  .smartoffice-dashboard-header h2{
+    font-size:12px;
+    line-height:1.1;
+    margin-bottom:0px;
+  }
+
+  .smartoffice-dashboard-header p{
+    font-size:9px;
+    line-height:1.4;
+  }
+
+  .smartoffice-dashboard-logout-button{
+    padding:6px 10px;
+    border-radius:14px;
+    font-size:10px;
+  }
+
+  /* =========================
+    QUICK STATS
+  ========================= */
   .smartoffice-dashboard-stat-card{
-    min-width:auto;
-
-    padding:
-      14px 14px;
-
-    border-radius:18px;
     display:flex;
     flex-direction:column;
-    justify-content:flex-start;
-    gap:8px;
-    min-height:88px;
+    align-items:stretch;
+    padding:12px 14px;
+    min-height:68px;
   }
 
   .smartoffice-dashboard-stat-left{
     display:flex;
-    align-items:flex-start;
     justify-content:space-between;
+    align-items:center;
     width:100%;
+    gap:0;
   }
 
   .smartoffice-dashboard-stat-left p{
     font-size:11px;
     font-weight:600;
     line-height:1.2;
-    opacity:0.92;
-    order:1;
+    white-space:nowrap;
   }
 
   .smartoffice-dashboard-stat-card h3{
-    font-size:24px;
+    margin-top:2px;
+    font-size:18px;
+    font-weight:700;
     line-height:1;
-    margin:0;
-    margin-top:-16px;
-    width:100%;
-    text-align: left;
+    text-align:right;
+    margin-right:2px;
   }
 
   .smartoffice-dashboard-stat-icon{
-    width:36px;
-    height:36px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-    order:2;
+    width: 24px;
+    height:24px;
+    border-radius:10px;
+  }
+
+  .smartoffice-dashboard-stat-icon svg{
+    width:16px;
+    height:16px;
   }
 
   /* =========================
-    MOBILE MENU GRID
+     MENU
   ========================= */
   .smartoffice-dashboard-menu-grid{
-    gap:12px;
+    gap:10px;
   }
 
   .smartoffice-dashboard-menu-card{
     padding:18px;
     border-radius:22px;
-    min-height:140px;
+    min-height:112px;
   }
 
   .smartoffice-dashboard-menu-icon{
-    margin-bottom:14px;
+    margin-bottom:8px;
   }
 
   .smartoffice-dashboard-menu-icon svg{
-    width:28px;
-    height:28px;
+    width:24px;
+    height:24px;
   }
 
   .smartoffice-dashboard-menu-card h3{
-    font-size:18px;
-    margin-bottom:6px;
+    font-size:12px;
+    margin-bottom:2px;
   }
 
   .smartoffice-dashboard-menu-card p{
-    font-size:12px;
-    line-height:1.4;
+    font-size:9px;
+    line-height:1.45;
   }
-  
-}
 
-/* =========================
-   DESKTOP HIDE
-========================= */
-@media(min-width:1101px){
-  .smartoffice-mobile-navbar{
-    display:none;
-  }
-}
-
-/* ======================================================
-   SMART OFFICE DESKTOP
-====================================================== */
-@media(min-width:1024px){
-  .smartoffice-dashboard-menu-grid{
-    grid-template-columns:
-      repeat(3,1fr);
+  .smartoffice-dashboard-menu-badge{
+    top:10px;
+    right:10px;
+    min-width:22px;
+    height:22px;
+    font-size:11px;
   }
 }

@@ -21,7 +21,6 @@ import {
     smartofficeRenderMobileNavbar
 } from "../components/navbar.js";
 
-import "../styles/smartoffice_style.css";
 import "../styles/smartoffice_dashboard_style.css";
 
 

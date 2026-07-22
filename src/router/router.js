@@ -17,6 +17,11 @@ import {
 
 
 /* ======================================================
+   PAGE CACHE
+====================================================== */
+const smartofficePageCache = {};
+
+/* ======================================================
    PAGE INITIALIZER
 ====================================================== */
 const smartofficePageInitializer = {
@@ -37,31 +42,40 @@ const smartofficePageInitializer = {
 ====================================================== */
 export async function smartofficeLoadPage(page){
 
-    const response =
-        await fetch(
-            `/pages/${page}.html`
-        );
+    let html;
 
-    if(!response.ok){
+    /* =========================
+       CACHE
+    ========================= */
+    if(smartofficePageCache[page]){
 
-        throw new Error(
-            `Halaman ${page} tidak ditemukan`
-        );
+        html = smartofficePageCache[page];
+
+    }else{
+
+        const response =
+            await fetch(`/pages/${page}.html`);
+
+        if(!response.ok){
+
+            throw new Error(
+                `Halaman ${page} tidak ditemukan`
+            );
+
+        }
+
+        html = await response.text();
+
+        smartofficePageCache[page] = html;
 
     }
 
-    const html =
-        await response.text();
-
     document
         .getElementById("app")
-        .innerHTML =
-        html;
+        .innerHTML = html;
 
     const initializer =
-        smartofficePageInitializer[
-            page
-        ];
+        smartofficePageInitializer[page];
 
     if(typeof initializer === "function"){
 
@@ -71,10 +85,8 @@ export async function smartofficeLoadPage(page){
 
 }
 
-
 /* ======================================================
    GLOBAL FUNCTIONS
 ====================================================== */
 window.smartofficeLoadPage =
     smartofficeLoadPage;
-
