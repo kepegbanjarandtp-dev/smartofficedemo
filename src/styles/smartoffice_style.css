@@ -142,7 +142,7 @@ button{
 
   animation:
     smartofficeSpin
-    0.45s linear infinite;
+    0.7s linear infinite;
 }
 
 @keyframes smartofficeSpin{

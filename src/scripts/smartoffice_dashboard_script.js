@@ -93,35 +93,61 @@ export async function smartofficeLoadDashboardPage(){
   }
 
   /* =========================
-     DASHBOARD AVATAR
+    WELCOME CARD
   ========================= */
   const avatarElement =
     document.getElementById(
       "smartofficeDashboardAvatar"
     );
 
-  if(
-    avatarElement
-  ){
-    avatarElement.innerText =
+  if (avatarElement) {
+    avatarElement.textContent =
       (sessionData.nama || "?")
-          .charAt(0)
-          .toUpperCase();
+        .charAt(0)
+        .toUpperCase();
   }
 
-  /* =========================
-     USER NAME
-  ========================= */
   const userNameElement =
     document.getElementById(
       "smartofficeDashboardUserName"
     );
 
-  if(
-    userNameElement
-  ){
-    userNameElement.innerText =
-      `Halo, ${sessionData.nama || "User"}`;
+  if(userNameElement){
+    userNameElement.textContent =
+      sessionData.nama || "-";
+  }
+
+  const jabatanElement =
+    document.getElementById(
+      "smartofficeDashboardJabatan"
+    );
+
+  if(jabatanElement){
+    jabatanElement.textContent =
+      sessionData.jabatan || "-";
+  }
+
+  const todayElement =
+    document.getElementById(
+      "smartofficeDashboardToday"
+    );
+
+  if(todayElement){
+
+    const tanggal =
+      new Date().toLocaleDateString(
+        "id-ID",
+        {
+          weekday:"long",
+          day:"numeric",
+          month:"long",
+          year:"numeric"
+        }
+      );
+
+    todayElement.textContent =
+      tanggal;
+
   }
 
   /* =========================
@@ -209,32 +235,6 @@ export async function smartofficeLoadDashboardPage(){
   }
 
   /* =========================
-     LOADER
-  ========================= */
-  const loaderIds = [
-
-      "smartofficeTotalCuti",
-      "smartofficeApprovedCuti",
-      "smartofficeTotalSpd",
-      "smartofficeApprovedSpd"
-
-  ];
-
-  loaderIds.forEach(function(id){
-
-      const element =
-          document.getElementById(id);
-
-      if(element){
-
-          element.innerHTML =
-              '<span class="smartoffice-mini-loader"></span>';
-
-      }
-
-  });
-
-  /* =========================
      APPROVAL BADGE
   ========================= */
   if(
@@ -256,60 +256,6 @@ export async function smartofficeLoadDashboardPage(){
     catch(error){
       console.error(error);
     }
-  }
-
-  /* =========================
-    SET STAT
-  ========================= */
-  function setStat(
-      id,
-      value
-  ){
-
-      const element =
-          document.getElementById(id);
-
-      if(
-          element
-      ){
-          element.innerText =
-              value ?? 0;
-      }
-
-  }
-
-  /* =========================
-     DASHBOARD STATS
-  ========================= */
-  try{
-    const stats =
-      await smartofficeGetDashboardStats(
-          sessionData.nip
-      ) || {};
-
-    setStat(
-        "smartofficeTotalCuti",
-        stats.totalCuti
-    );
-
-    setStat(
-        "smartofficeApprovedCuti",
-        stats.approvedCuti
-    );
-
-    setStat(
-        "smartofficeTotalSpd",
-        stats.totalSpd
-    );
-
-    setStat(
-        "smartofficeApprovedSpd",
-        stats.approvedSpd
-    );
-  }
-
-  catch(error){
-    console.error(error);
   }
 
   /* =========================
@@ -400,26 +346,43 @@ export async function smartofficeLogout(){
 /* ======================================================
    INIT DASHBOARD MENU
 ====================================================== */
-
 function smartofficeInitDashboardMenu(){
 
-  /* CUTI */
-  document
-    .getElementById(
-      "smartofficeCutiMenuCard"
-    )
-    ?.addEventListener(
-      "click",
-      async function(){
+    /* =========================
+       CUTI
+    ========================= */
+    document
+        .getElementById(
+            "smartofficeCutiMenuCard"
+        )
+        ?.addEventListener(
+            "click",
+            async function(){
 
-        console.log("CUTI DIKLIK");
+                await smartofficeLoadPage(
+                    "smartoffice_cuti"
+                );
 
-        await smartofficeLoadPage(
-          "smartoffice_cuti"
+            }
         );
 
-      }
-    );
+    /* =========================
+       APPROVAL
+    ========================= */
+    document
+        .getElementById(
+            "smartofficeApprovalMenuCard"
+        )
+        ?.addEventListener(
+            "click",
+            async function(){
+
+                await smartofficeLoadPage(
+                    "smartoffice_approval"
+                );
+
+            }
+        );
 
 }
 

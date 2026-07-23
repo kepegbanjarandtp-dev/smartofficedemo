@@ -13,7 +13,11 @@ from "../scripts/smartoffice_dashboard_script.js";
 
 import {
     smartofficeLoadCutiPage
-} from "../scripts/smartoffice_cuti_script";
+} from "../scripts/smartoffice_cuti_script.js";
+
+import {
+    smartofficeLoadApprovalPage
+} from "../scripts/smartoffice_approval_script.js";
 
 
 /* ======================================================
@@ -33,7 +37,10 @@ const smartofficePageInitializer = {
         smartofficeLoadDashboardPage,
 
     smartoffice_cuti:
-        smartofficeLoadCutiPage
+        smartofficeLoadCutiPage,
+
+    smartoffice_approval:
+        smartofficeLoadApprovalPage
 
 };
 
