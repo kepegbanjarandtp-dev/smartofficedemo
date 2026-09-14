@@ -52,6 +52,8 @@ import {
     smartofficeSubmitCuti
 } from "../../services/cuti.service.js";
 
+import { smartofficeGetRiwayatCutiFirestore } from "../../services/cuti-firestore.service.js";
+
 /* ======================================================
    UTILS
 ====================================================== */
@@ -123,7 +125,13 @@ export async function smartofficeLoadPage(){
         "cuti"
     );
 
-    /* LOAD DATA PEGAWAI & CACHE PEGAWAI */
+    // TAB LANGSUNG AKTIF
+    smartofficeInitTab();
+
+    // TAMPILKAN FORM LANGSUNG
+    smartofficeSwitchCutiTab("form");
+
+    /* LOAD DATA PEGAWAI & CACHE PEGAWAI & RIWAYAT CUTI*/
     await Promise.all([
         smartofficeLoadPegawai(sessionData.nip),
         smartofficeLoadPegawaiCache()
@@ -148,14 +156,8 @@ export async function smartofficeLoadPage(){
     /* INIT COMPONENT */
     smartofficeInitAutoHitungCuti();
     smartofficeInitUploadLampiran();
-    smartofficeInitSubmitButton();
-    smartofficeInitTab();
+    smartofficeInitSubmitButton();    
     smartofficeInitRefreshButton();
-
-    /* DEFAULT TAB */
-    smartofficeSwitchCutiTab(
-        "form"
-    );
 }
 
 /* ======================================================
@@ -549,10 +551,7 @@ export async function smartofficeLoadRiwayatCuti(
         /* =========================
            LOAD DATA
         ========================= */
-        const data =
-            await smartofficeGetRiwayatCuti(
-                nip
-            );
+        const data = await smartofficeGetRiwayatCutiFirestore(nip);
 
         /* =========================
            SIMPAN KE CACHE
@@ -1880,37 +1879,31 @@ export async function smartofficeSwitchCutiTab(
 
     /* RIWAYAT */
     else{
-        riwayatContent.style.display =
-            "block";
+        riwayatContent.style.display = "block";
+        formContent.style.display = "none";
 
-        formContent.style.display =
-            "none";
+        riwayatButton.classList.add("active");
+        formButton.classList.remove("active");
 
-        riwayatButton.classList.add(
-            "active"
-        );
+        if(!smartofficeRiwayatCutiCache){
+            const container = document.getElementById("smartofficeRiwayatCutiList");
 
-        /* BELUM ADA CACHE */
-        if(
-            smartofficeRiwayatCutiCache === null
-        ){
-            const session =
-                smartofficeGetSession();
-
-            if(session){
-                await smartofficeLoadRiwayatCuti(
-                    session.nip
-                );
+            if(container){
+                container.innerHTML = `
+                    <div class="smartoffice-loading-state">
+                        Memuat data riwayat cuti...
+                    </div>
+                `;
             }
+
+            const sessionData = smartofficeGetSession();
+
+            await smartofficeLoadRiwayatCuti(sessionData.nip);
         }
 
-        /* SUDAH ADA CACHE */
-        else{
-            smartofficeRenderRiwayatCuti();
-        }
+        smartofficeRenderRiwayatCuti();
     }
 }
-
 
 
 /* ================================================================================
