@@ -1,0 +1,74 @@
+/* ======================================================
+   SMART OFFICE V3
+   FIRESTORE PEGAWAI SERVICE
+====================================================== */
+import {
+    doc,
+    getDoc
+} from "firebase/firestore";
+
+import {
+    smartofficeFirestore
+} from "../core/firebase-firestore.js";
+
+
+/* ======================================================
+   GET DATA PEGAWAI DARI FIRESTORE
+====================================================== */
+export async function smartofficeGetPegawaiFromFirestore(nip){
+
+    try{
+        const nipValue =
+            String(nip || "").trim();
+
+        if(!nipValue){
+            return {
+                success: false,
+                message: "NIP tidak boleh kosong."
+            };
+        }
+
+        const pegawaiRef =
+            doc(
+                smartofficeFirestore,
+                "pegawai",
+                nipValue
+            );
+
+        const snapshot =
+            await getDoc(
+                pegawaiRef
+            );
+
+        /* =========================
+           DATA TIDAK DITEMUKAN
+        ========================= */
+        if(!snapshot.exists()){
+            return {
+                success: false,
+                message: "Data pegawai tidak ditemukan."
+            };
+        }
+
+        /* =========================
+           DATA DITEMUKAN
+        ========================= */
+        return {
+            success: true,
+            data: snapshot.data()
+        };
+    }
+    catch(error){
+        console.error(
+            "Firestore Get Pegawai Error:",
+            error
+        );
+
+        return {
+            success: false,
+            message:
+                error?.message ||
+                "Gagal mengambil data pegawai dari Firestore."
+        };
+    }
+}
