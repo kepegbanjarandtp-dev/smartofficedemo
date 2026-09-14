@@ -52,7 +52,15 @@ import {
     smartofficeSubmitCuti
 } from "../../services/cuti.service.js";
 
-import { smartofficeGetRiwayatCutiFirestore } from "../../services/cuti-firestore.service.js";
+import {
+    smartofficeGetRiwayatCutiFirestore,
+    smartofficeGetCutiStatsFirestore
+} from "../../services/cuti-firestore.service.js";
+
+import {
+    smartofficeGetPegawaiFromFirestore,
+    smartofficeGetAllPegawaiFromFirestore
+} from "../../services/pegawai-firestore.service.js";
 
 /* ======================================================
    UTILS
@@ -229,10 +237,20 @@ export async function smartofficeLoadPegawai(
 
     try{
         /* GET DATA PEGAWAI */
-        const data =
-            await smartofficeGetPegawaiByNip(
+        const result =
+            await smartofficeGetPegawaiFromFirestore(
                 nip
             );
+
+        if(!result.success){
+            smartofficeShowToast(
+                result.message || "Data pegawai tidak ditemukan",
+                "error"
+            );
+            return;
+        }
+
+        const data = result.data;
 
         /* VALIDASI DATA */
         if(
@@ -310,41 +328,51 @@ export async function smartofficeLoadPegawai(
             );
 
         /* MINI STATS */
-        const sisaElement =
-            document.getElementById(
-                "smartofficeStatSisaCuti"
+        const stats =
+            await smartofficeGetCutiStatsFirestore(
+                nip
             );
 
-        sisaElement.innerText =
-            data.sisaCuti || 0;
+        if(stats.success){
 
-        sisaElement.classList.remove(
-            "smartoffice-skeleton-text"
-        );
+            const sisaElement =
+                document.getElementById(
+                    "smartofficeStatSisaCuti"
+                );
 
-        const menungguElement =
-            document.getElementById(
-                "smartofficeStatMenungguCuti"
+            sisaElement.innerText =
+                stats.data.sisaCuti || 0;
+
+            sisaElement.classList.remove(
+                "smartoffice-skeleton-text"
             );
 
-        menungguElement.innerText =
-            data.totalMenunggu || 0;
 
-        menungguElement.classList.remove(
-            "smartoffice-skeleton-text"
-        );
+            const menungguElement =
+                document.getElementById(
+                    "smartofficeStatMenungguCuti"
+                );
 
-        const disetujuiElement =
-            document.getElementById(
-                "smartofficeStatDisetujuiCuti"
+            menungguElement.innerText =
+                stats.data.totalMenunggu || 0;
+
+            menungguElement.classList.remove(
+                "smartoffice-skeleton-text"
             );
 
-        disetujuiElement.innerText =
-            data.totalDisetujui || 0;
 
-        disetujuiElement.classList.remove(
-            "smartoffice-skeleton-text"
-        );
+            const disetujuiElement =
+                document.getElementById(
+                    "smartofficeStatDisetujuiCuti"
+                );
+
+            disetujuiElement.innerText =
+                stats.data.totalDisetujui || 0;
+
+            disetujuiElement.classList.remove(
+                "smartoffice-skeleton-text"
+            );
+        }
 
         /* LOAD JENIS CUTI */
         smartofficeLoadJenisCuti();
@@ -389,27 +417,35 @@ export async function smartofficeLoadPegawai(
    LOAD CACHE PEGAWAI
 ====================================================== */
 export async function smartofficeLoadPegawaiCache(){
+
     try{
-        /* GET DATA PEGAWAI */
+
+        /* GET DATA PEGAWAI DARI FIRESTORE */
         const result =
-            await smartofficeSearchPegawaiCuti(
-                ""
+            await smartofficeGetAllPegawaiFromFirestore();
+
+        if(!result.success){
+            throw new Error(
+                result.message ||
+                "Gagal mengambil data pegawai."
             );
+        }
 
         console.log(
-            "CACHE PEGAWAI CUTI:",
-            result
+            "CACHE PEGAWAI CUTI FIRESTORE:",
+            result.data
         );
 
         /* SAVE CACHE */
         smartofficePegawaiCache =
-            result || [];
+            result.data || [];
 
         /* INIT AUTOCOMPLETE */
         smartofficeInitCutiDelegasiAutocomplete();
 
     }
     catch(error){
+
         console.error(error);
 
         smartofficeShowToast(
@@ -520,7 +556,6 @@ export function smartofficeLoadJenisCuti(){
 
     selectJenis.innerHTML = html;
 }
-
 
 
 /* ================================================================================

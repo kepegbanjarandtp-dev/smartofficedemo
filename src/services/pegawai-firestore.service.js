@@ -3,6 +3,8 @@
    FIRESTORE PEGAWAI SERVICE
 ====================================================== */
 import {
+    collection,
+    getDocs,
     doc,
     getDoc
 } from "firebase/firestore";
@@ -66,6 +68,46 @@ export async function smartofficeGetPegawaiFromFirestore(nip){
 
         return {
             success: false,
+            message:
+                error?.message ||
+                "Gagal mengambil data pegawai dari Firestore."
+        };
+    }
+}
+
+
+/* ======================================================
+   GET SEMUA DATA PEGAWAI DARI FIRESTORE
+====================================================== */
+export async function smartofficeGetAllPegawaiFromFirestore(){
+
+    try{
+        const snapshot =
+            await getDocs(
+                collection(
+                    smartofficeFirestore,
+                    "pegawai"
+                )
+            );
+
+        return {
+            success: true,
+            data: snapshot.docs.map(docSnapshot => ({
+                ...docSnapshot.data(),
+                nip: docSnapshot.id
+            }))
+        };
+    }
+    catch(error){
+
+        console.error(
+            "Firestore Get All Pegawai Error:",
+            error
+        );
+
+        return {
+            success: false,
+            data: [],
             message:
                 error?.message ||
                 "Gagal mengambil data pegawai dari Firestore."
