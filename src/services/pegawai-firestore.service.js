@@ -55,9 +55,13 @@ export async function smartofficeGetPegawaiFromFirestore(nip){
         /* =========================
            DATA DITEMUKAN
         ========================= */
+        const data = snapshot.data();
         return {
             success: true,
-            data: snapshot.data()
+            data: {
+                ...data,
+                pangkat: data.pangkatGol || ""
+            }
         };
     }
     catch(error){

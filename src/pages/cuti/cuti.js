@@ -334,7 +334,6 @@ export async function smartofficeLoadPegawai(
             );
 
         if(stats.success){
-
             const sisaElement =
                 document.getElementById(
                     "smartofficeStatSisaCuti"
@@ -347,7 +346,6 @@ export async function smartofficeLoadPegawai(
                 "smartoffice-skeleton-text"
             );
 
-
             const menungguElement =
                 document.getElementById(
                     "smartofficeStatMenungguCuti"
@@ -359,7 +357,6 @@ export async function smartofficeLoadPegawai(
             menungguElement.classList.remove(
                 "smartoffice-skeleton-text"
             );
-
 
             const disetujuiElement =
                 document.getElementById(
@@ -413,13 +410,13 @@ export async function smartofficeLoadPegawai(
     }
 }
 
+
 /* ======================================================
    LOAD CACHE PEGAWAI
 ====================================================== */
 export async function smartofficeLoadPegawaiCache(){
 
     try{
-
         /* GET DATA PEGAWAI DARI FIRESTORE */
         const result =
             await smartofficeGetAllPegawaiFromFirestore();
@@ -442,10 +439,8 @@ export async function smartofficeLoadPegawaiCache(){
 
         /* INIT AUTOCOMPLETE */
         smartofficeInitCutiDelegasiAutocomplete();
-
     }
     catch(error){
-
         console.error(error);
 
         smartofficeShowToast(
