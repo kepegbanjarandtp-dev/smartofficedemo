@@ -3,13 +3,17 @@
 ====================================================== */
 
 /* ======================================================
-   CORE — SESSION
+   CORE 
 ====================================================== */
 import {
     smartofficeCheckSession,
     smartofficeGetSession,
     smartofficeLogout
 } from "../../core/session.js";
+
+import {
+    smartofficeCacheRemove
+} from "../../core/cache.js";
 
 /* ======================================================
    SERVICE — ARSIP PEGAWAI
@@ -19,7 +23,8 @@ import {
     smartofficeGetArsipPegawai,
     smartofficeGetArsipStat,
     smartofficeGetProgressArsip,
-    smartofficeBukaLockDokumen
+    smartofficeBukaLockDokumen,
+    smartofficeClearArsipCache
 } from "../../services/arsip-pegawai.service.js";
 
 /* ======================================================
@@ -226,11 +231,15 @@ export async function smartofficeDestroyPage(){
 /* ======================================================
    LOAD PEGAWAI ARSIP
 ====================================================== */
-export async function smartofficeLoadPegawaiArsip(){
+export async function smartofficeLoadPegawaiArsip(
+    forceRefresh = false
+){
 
     try{
         const data =
-            await smartofficeGetDaftarPegawaiArsip();
+            await smartofficeGetDaftarPegawaiArsip(
+                forceRefresh
+            );
 
         console.log(
             "PEGAWAI ARSIP",
@@ -282,7 +291,9 @@ export async function smartofficeLoadPegawaiArsip(){
 /* ======================================================
    CARI ARSIP PEGAWAI
 ====================================================== */
-export async function smartofficeCariArsipPegawai(){
+export async function smartofficeCariArsipPegawai(
+    forceRefresh = false
+){
 
     const select =
         document.getElementById(
@@ -326,7 +337,11 @@ export async function smartofficeCariArsipPegawai(){
 
     try{
         const pageInstance = smartofficeArsipPageInstance;
-        const data = await smartofficeGetArsipPegawai(nip);
+        const data =
+            await smartofficeGetArsipPegawai(
+                nip,
+                forceRefresh
+            );
 
         if (pageInstance !== smartofficeArsipPageInstance) {
             return;
@@ -1356,7 +1371,9 @@ export function smartofficeRenderArsipPegawai(
 /* ======================================================
    LOAD ARSIP STAT
 ====================================================== */
-export async function smartofficeLoadArsipStat(){
+export async function smartofficeLoadArsipStat(
+    forceRefresh = false
+){
 
     console.log(
         "LOAD ARSIP STAT"
@@ -1367,7 +1384,9 @@ export async function smartofficeLoadArsipStat(){
             smartofficeArsipPageInstance;
 
         const data =
-            await smartofficeGetArsipStat();
+            await smartofficeGetArsipStat(
+                forceRefresh
+            );
 
         if(
             pageInstance !==
@@ -1397,7 +1416,9 @@ export async function smartofficeLoadArsipStat(){
 /* ======================================================
    LOAD PROGRESS ARSIP
 ====================================================== */
-export async function smartofficeLoadProgressArsip(){
+export async function smartofficeLoadProgressArsip(
+    forceRefresh = false
+){
 
     const container =
         document.getElementById(
@@ -1423,8 +1444,11 @@ export async function smartofficeLoadProgressArsip(){
         ========================= */    
         const pageInstance =
             smartofficeArsipPageInstance;
+
         const data =
-            await smartofficeGetProgressArsip();
+            await smartofficeGetProgressArsip(
+                forceRefresh
+            );
 
         if(
             pageInstance !==
@@ -2179,6 +2203,13 @@ export async function smartofficeSubmitBukaLockDokumen(
         );
 
         /* =========================
+           INVALIDATE CACHE DETAIL
+        ========================= */
+        smartofficeCacheRemove(
+            `arsip_detail_pegawai_${sessionData.nip}`
+        );
+
+        /* =========================
            LOAD ULANG ARSIP
         ========================= */
         await smartofficeCariArsipPegawai();
@@ -2367,22 +2398,21 @@ export async function smartofficeRefreshArsip(){
     `;
 
     /* =========================
-       RELOAD DATA
+       CLEAR CACHE ARSIP
+    ========================= */
+    smartofficeClearArsipCache();
+
+    /* =========================
+       RELOAD SEMUA DATA ARSIP
     ========================= */
     const pageInstance =
         smartofficeArsipPageInstance;
 
     await Promise.all([
-        smartofficeLoadArsipStat(),
-        smartofficeLoadPegawaiArsip()
+        smartofficeLoadArsipStat(true),
+        smartofficeLoadPegawaiArsip(true),
+        smartofficeLoadProgressArsip(true)
     ]);
-
-    if(
-        pageInstance !==
-        smartofficeArsipPageInstance
-    ){
-        return;
-    }
 
     /* =========================
        TOAST
@@ -2419,7 +2449,9 @@ export async function smartofficeRefreshProgressArsip(){
     const pageInstance =
         smartofficeArsipPageInstance;
 
-    await smartofficeLoadProgressArsip();
+    await smartofficeLoadProgressArsip(
+        true
+    );
 
     if(
         pageInstance !==

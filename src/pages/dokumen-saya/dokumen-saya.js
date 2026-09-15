@@ -11,7 +11,6 @@ import {
     smartofficeLogout
 } from "../../core/session.js";
 
-
 /* ======================================================
    IMPORT — ROUTER
 ====================================================== */
@@ -51,7 +50,7 @@ import {
 import {
     smartofficeGetPegawaiByNip,
     smartofficeGetMasterDokumen,
-    smartofficeGetDokumenPegawai,
+    smartofficeGetDokumenPegawaiCached,
     smartofficeUploadDokumen
 } from "../../services/dokumen-saya.service.js";
 
@@ -184,9 +183,7 @@ export async function smartofficeLoadPage(){
 
         smartofficeLoadMasterDokumen(),
 
-        smartofficeLoadDokumenSaya(
-            sessionData.nip
-        )
+        smartofficeLoadDokumenSaya()
     ]);
 
     if(
@@ -545,7 +542,7 @@ async function smartofficeLoadMasterDokumen(){
    2. Request backend
    3. Render dokumen
 ========================= */
-async function smartofficeLoadDokumenSaya(){
+async function smartofficeLoadDokumenSaya(forceRefresh = false){
 
     /* SESSION */
     const sessionData =
@@ -561,8 +558,9 @@ async function smartofficeLoadDokumenSaya(){
             smartofficeDokumenPageInstance;
 
         const data =
-            await smartofficeGetDokumenPegawaiFirestore(
-                sessionData.nip
+            await smartofficeGetDokumenPegawaiCached(
+                sessionData.nip,
+                forceRefresh
             );
         if(
             pageInstance !==
@@ -1616,7 +1614,6 @@ async function smartofficeSubmitDokumen(){
                     mimeType:
                         file.type,
 
-                    /* TETAP ASLI */
                     base64:
                         e.target.result
                 });
@@ -1643,9 +1640,12 @@ async function smartofficeSubmitDokumen(){
                 smartofficeResetDokumenForm();
 
                 /* =========================
-                   LOAD ULANG
+                   LOAD DATA TERBARU
+                   FORCE REFRESH FIRESTORE
                 ========================= */
-                await smartofficeLoadDokumenSaya();
+                await smartofficeLoadDokumenSaya(
+                    true
+                );
 
                 success =
                     true;
@@ -1680,8 +1680,7 @@ async function smartofficeSubmitDokumen(){
                 }
 
                 /* =========================
-                   TOAST SUCCESS
-                   PALING TERAKHIR
+                   SUCCESS TOAST
                 ========================= */
                 if(
                     success &&
@@ -1837,7 +1836,7 @@ async function smartofficeRefreshDokumen(){
         /* =========================
            RELOAD DATA
         ========================= */
-        await smartofficeLoadDokumenSaya();
+        await smartofficeLoadDokumenSaya(true);
 
         /* =========================
            CEK HALAMAN
@@ -2353,7 +2352,7 @@ async function smartofficeSubmitEditDokumen(){
                 /* =========================
                    RELOAD DATA
                 ========================= */
-                await smartofficeLoadDokumenSaya();
+                await smartofficeLoadDokumenSaya(true);
 
                 /* =========================
                    CEK HALAMAN
